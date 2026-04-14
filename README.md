@@ -1,130 +1,66 @@
-# DSA 210 Project  
-## Analysis of Instagram Content Types and Engagement  
+# DSA 210 – Analysis of Instagram Content Types and Engagement
 
----
+**Student:** Duru Doğan – 35759  
+**Course:** DSA 210 Introduction to Data Science, Spring 2026
 
-## Research Question  
-Does content type significantly affect engagement on Instagram, and how is this relationship influenced by user activity levels?
+## Research Question
 
----
+Does content type significantly affect engagement on Instagram, and is this effect influenced by user activity levels (peak vs. off-peak posting hours)?
 
-## Overview  
-This project investigates how different types of Instagram content influence user engagement and whether posting time plays a role in this relationship.
+## Hypothesis
 
-With the rapid growth of social media platforms, Instagram has become one of the most important tools for communication, marketing, and content creation. Different content formats such as photos, reels, and carousels are widely used, yet their effectiveness in generating engagement may vary.
+**H1:** Different Instagram content types (image, carousel, reel) lead to significantly different engagement levels.  
+- Formally: The median engagement rate differs across at least one pair of content types.  
+- Test: Kruskal-Wallis test, followed by pairwise Mann-Whitney U tests with Bonferroni correction (α = 0.05).
 
-This project analyzes engagement at the post level and enriches the analysis with general user activity patterns derived from a secondary dataset.
+**H2:** Posts shared during peak user activity hours receive higher engagement than posts shared during off-peak hours.  
+- Formally: The median engagement rate of peak-hour posts is significantly higher than off-peak-hour posts.  
+- Test: Mann-Whitney U test (α = 0.05).
 
----
+**Engagement metric:** `engagement = likes + comments` (a combined count that captures both passive appreciation and active interaction).
 
-## Terminology  
+## Datasets
 
-- **Engagement:** Total interaction on a post, calculated as:  
-  **Engagement = Likes + Comments**
+| Dataset | Source | Description |
+|---|---|---|
+| Instagram Analytics | [Kaggle – Instagram Reach Analysis](https://www.kaggle.com/datasets/instagram-reach-analysis) | ~29,000 Instagram posts with likes, comments, post type, and timestamps |
+| HybridDataset | [Kaggle – Social Media & Mental Health](https://www.kaggle.com/datasets/souvikahmed071/social-media-and-mental-health) | ~480 survey responses on user behavior, daily usage hours, and platform preferences |
 
-- **Post Type:** Type of Instagram content (photo, reel, carousel)  
-- **Timestamp:** Date and time when a post was shared  
-- **Posting Hour:** Extracted hour from timestamp  
-- **Peak Hours:** Time periods when user activity is highest  
-- **Off-Peak Hours:** Time periods with relatively lower activity  
-- **Activity Level:** Indicates whether a post was shared during peak or off-peak hours  
+### How the second dataset is used
 
----
+The two datasets do not share common user identifiers and are **not directly merged**. The HybridDataset is used to derive general Instagram activity patterns:
 
-## Motivation  
-Social media platforms, especially Instagram, play a central role in digital marketing and communication. As content formats diversify, understanding which types of posts generate higher engagement has become increasingly important.
+1. The survey shows the majority of respondents are students who spend 4+ hours online daily and use Instagram as their primary platform.
+2. This justifies using engagement-based peak hour detection on the main dataset: hours where the average engagement rate falls in the top 33rd percentile are labeled **Peak**, the rest **Off-Peak**.
+3. Each post in the Instagram Analytics dataset is then labeled accordingly.
 
-Additionally, user activity varies throughout the day, which may influence how content performs. This project combines content-related factors with temporal activity patterns to better understand engagement dynamics.
+## Repository Structure
 
----
+```
+your-repo/
+├── data/
+│   ├── Instagram_Analytics.csv
+│   └── HybridDataset.csv
+├── notebooks/
+│   └── EDA_and_Hypothesis_Tests.ipynb
+├── figures/
+│   ├── engagement_by_type.png
+│   ├── peak_vs_offpeak.png
+│   └── heatmap.png
+├── requirements.txt
+└── README.md
+```
 
-## Hypotheses  
+## How to Run
 
-- **H₀ (Null Hypothesis):**  
-  There is no significant difference in mean engagement across content types or activity levels.
+```bash
+pip install -r requirements.txt
+mkdir -p figures
+jupyter notebook notebooks/EDA_and_Hypothesis_Tests.ipynb
+```
 
-- **H1:**  
-  Mean engagement differs significantly across content types (photo, reel, carousel).
+Then run all cells (Cell → Run All).
 
-- **H2:**  
-  Posts shared during peak activity hours have higher mean engagement than those shared during off-peak hours.
+## Requirements
 
-- **H3:**  
-  There is a statistically significant interaction effect between content type and posting time on engagement.
-
----
-
-## Data Sources  
-
-- **Primary Dataset (Kaggle):**  
-  Instagram Post Dataset (~29,000 posts)  
-  Includes: likes, comments, post type, timestamp  
-  👉 Link: [ADD LINK HERE]
-
-- **Secondary Dataset (Enrichment):**  
-  Instagram User Activity Dataset  
-  Includes: activity patterns, time-based usage trends  
-  👉 Link: [ADD LINK HERE]
-
----
-
-## Data Preparation and Enrichment  
-
-The main dataset will be cleaned and processed to ensure consistency.
-
-### Feature Engineering:
-- Engagement = likes + comments  
-- Posting hour extracted from timestamp  
-
-### Enrichment Strategy:
-Since the datasets do not share common identifiers, they will not be directly merged.
-
-Instead, the secondary dataset will be used to calculate **average activity levels for each hour of the day**. Based on these values:
-
-- High-activity hours → labeled as **Peak**
-- Low-activity hours → labeled as **Off-Peak**
-
-Each post in the primary dataset will then be assigned an **activity level label** based on its posting hour.
-
----
-
-## Analysis Plan  
-
-### 1. Exploratory Data Analysis (EDA)
-- Distribution of engagement  
-- Engagement across content types  
-- Engagement across posting hours  
-
-### 2. Statistical Testing  
-
-- **One-way ANOVA:**  
-  To test differences in mean engagement across content types (H1)
-
-- **Independent Samples t-test:**  
-  To compare engagement between peak and off-peak hours (H2)
-
-- **Two-way ANOVA:**  
-  To analyze interaction effects between content type and activity level (H3)
-
-### 3. Visualization  
-- Boxplots of engagement by content type  
-- Line plots of hourly engagement trends  
-- Interaction plots (content type × activity level)  
-
----
-
-## Expected Outcome  
-This project is expected to show that engagement varies across content types and that posting during peak activity periods improves performance.
-
-It may also reveal that certain content types perform better depending on when they are shared.
-
----
-
-## Limitations  
-- No direct user matching between datasets  
-- Behavioral patterns are generalized  
-- Results depend on dataset scope  
-
----
-
-Duru Doğan - 35759
+See `requirements.txt`. Main dependencies: `pandas`, `numpy`, `matplotlib`, `seaborn`, `scipy`, `jupyter`.
