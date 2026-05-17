@@ -25,7 +25,7 @@ Does content type significantly affect engagement on Instagram, and is this effe
 
 ---
 
-## ⚠️ Methodological Note — Peak Hour Definition
+## Methodological Note — Peak Hour Definition
 
 **Original problem (instructor feedback):** Peak hours were originally defined as hours where average `engagement_rate` in the Instagram dataset exceeded the 67th percentile — then engagement was tested against those same labels. This is **circular reasoning**: the label was derived from the outcome variable, biasing the test toward finding significance.
 
